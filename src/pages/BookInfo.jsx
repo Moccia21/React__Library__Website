@@ -5,16 +5,18 @@ import Rating from "../components/ui/Rating";
 import Price from "../components/ui/Price";
 import Book from "../components/ui/Book";
 
-const BookInfo = ({ books, addToCart, cart }) => {
+const BookInfo = ({ books, addItemToCart }) => {
   const { id } = useParams();
   const book = books.find((book) => +book.id === +id);
+  const [isAdded, setIsAdded] = useState(false);
 
-  function addBookToCart(book) {
-    addToCart(book);
+  const handleAddToCart = () => {
+    setIsAdded(true);
   }
 
-  function bookExistsInCart() {
-    return cart.find((book) => book.id === +id);
+  const handleClick = () => {
+    handleAddToCart();
+    addItemToCart(book);
   }
 
   return (
@@ -58,14 +60,12 @@ const BookInfo = ({ books, addToCart, cart }) => {
                     iusto quos porro quas quibusdam odio?
                   </p>
                 </div>
-                {bookExistsInCart() ? (
-                  <Link to={'/cart'} className="book__link">
-                    <button className="btn">Checkout</button>
-                  </Link>
-                  ) : (
-                    <button className="btn" onClick={() => addBookToCart(book)}>Add to Cart</button>
-                  )
-                }
+                <button className="btn" 
+                onClick={handleClick}
+                style={{backgroundColor: isAdded ? 'gray' : '#7342d6'}}
+                disabled={isAdded}>
+                 {isAdded ? 'Added to Cart' : 'Add to Cart'}
+                </button>
               </div>
             </div>
           </div>
